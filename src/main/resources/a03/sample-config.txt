@@ -1,0 +1,11 @@
+job {
+  name    = "nightly-roster-sync"
+  retries = 3
+  window  = [ "22:00", "04:00" ]
+  targets = [
+    { host = "portal-a.example", paths = [ "/roster", "/visits" ] },
+    { host = "portal-b.example", paths = [ "/export(all)" ] }
+  ]
+  notes   = "Brackets inside a quoted string are literal text: } ] ) and must be ignored."
+  hint    = 'Single quotes pair too, and a " inside them is just a character.'
+}

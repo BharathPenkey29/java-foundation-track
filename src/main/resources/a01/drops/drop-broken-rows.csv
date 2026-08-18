@@ -1,0 +1,8 @@
+mrn,lastName,firstName,dob,visitType,provider
+MRN00047,Fitzgerald,Sean,1988-01-30,ROUTINE,P. Adeyemi
+MRN00048,Nakamura,Yuki,1952-02-26,PALLIATIVE
+MRN00049,Oyelaran,Tunde,1970-08-19,ROUTINE,D. Marchetti,EXTRA
+,Petrov,Irina,1946-11-07,HOSPICE,D. Marchetti
+MRN00051,Whitfield,Margaret,,HOSPICE,L. Byrne
+MRN00047,Fitzgerald,Sean,1988-01-30,ROUTINE,P. Adeyemi
+MRN00052,Santos,Beatriz,1991-10-03,ROUTINE,P. Adeyemi

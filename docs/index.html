@@ -1,0 +1,1377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Four sequential Java 21 assignments for new joiners: syntax and file I/O, collections, OOP and exception design, generics and concurrency.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E&#9749;%3C/text%3E%3C/svg%3E">
+<style>*{margin:0;padding:0}</style>
+<title>Java Foundations Track</title>
+<style>
+  :root {
+    --paper:      #F5F6F8;
+    --surface:    #FFFFFF;
+    --surface-2:  #EEF1F4;
+    --ink:        #12171E;
+    --ink-2:      #4C5765;
+    --ink-3:      #79838F;
+    --rule:       #DDE1E7;
+    --rule-2:     #C2C9D2;
+    --java:       #0F5C50;
+    --java-soft:  #E2EDEA;
+    --dsa:        #8C3A1E;
+    --dsa-soft:   #F5E7E1;
+    --code-bg:    #EDF0F3;
+    --code-ink:   #1E2731;
+
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", Times, serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono:  ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas, "SF Mono", "Courier New", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0D1115;
+      --surface:    #141A20;
+      --surface-2:  #1A2129;
+      --ink:        #E6EAEF;
+      --ink-2:      #A2ACB8;
+      --ink-3:      #6F7A87;
+      --rule:       #242C35;
+      --rule-2:     #35404B;
+      --java:       #62C6B2;
+      --java-soft:  #123029;
+      --dsa:        #E29470;
+      --dsa-soft:   #33201A;
+      --code-bg:    #1A2128;
+      --code-ink:   #D6DDE5;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0D1115;
+    --surface:    #141A20;
+    --surface-2:  #1A2129;
+    --ink:        #E6EAEF;
+    --ink-2:      #A2ACB8;
+    --ink-3:      #6F7A87;
+    --rule:       #242C35;
+    --rule-2:     #35404B;
+    --java:       #62C6B2;
+    --java-soft:  #123029;
+    --dsa:        #E29470;
+    --dsa-soft:   #33201A;
+    --code-bg:    #1A2128;
+    --code-ink:   #D6DDE5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 0 1.75rem 6rem;
+  }
+
+  /* ---------- sticky nav ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-inner {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 0.7rem 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.4rem;
+  }
+  .nav-mark {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-right: auto;
+  }
+  .nav a {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+  }
+  .nav a:hover, .nav a:focus-visible { color: var(--ink); border-bottom-color: var(--java); }
+
+  /* ---------- masthead ---------- */
+  .mast { padding: 4.5rem 0 2.5rem; border-bottom: 2px solid var(--ink); }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--java);
+    margin: 0 0 1.1rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 6vw, 4.1rem);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.1rem;
+    text-wrap: balance;
+  }
+  .standfirst {
+    font-size: 1.1rem;
+    color: var(--ink-2);
+    max-width: 44rem;
+    margin: 0;
+  }
+  .mast-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.6rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  .fact dt {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.35rem;
+  }
+  .fact dd {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- generic sections ---------- */
+  .band { padding: 3.25rem 0 0; }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.9rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.9rem;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 2rem 0 0.75rem;
+    font-weight: 600;
+  }
+  p { margin: 0 0 1rem; }
+  a { color: var(--java); }
+
+  .lede { color: var(--ink-2); max-width: 44rem; }
+
+  ul, ol { margin: 0 0 1rem; padding-left: 1.15rem; }
+  li { margin-bottom: 0.35rem; }
+  li::marker { color: var(--ink-3); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.855em;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: 0.1em 0.36em;
+    border-radius: 2px;
+  }
+  pre {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    line-height: 1.55;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-left: 2px solid var(--rule-2);
+    padding: 0.9rem 1.1rem;
+    overflow-x: auto;
+    margin: 0 0 1rem;
+  }
+  pre code { background: none; padding: 0; font-size: 1em; }
+
+  .table-scroll { overflow-x: auto; margin-bottom: 1.25rem; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; min-width: 32rem; }
+  th, td { text-align: left; padding: 0.6rem 0.9rem 0.6rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+    border-bottom-color: var(--rule-2);
+  }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* ---------- assignment header ---------- */
+  .assignment { padding-top: 4.5rem; }
+  .a-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 1.5rem;
+    align-items: start;
+    padding-bottom: 1.4rem;
+    border-bottom: 2px solid var(--ink);
+  }
+  .a-num {
+    font-family: var(--serif);
+    font-size: clamp(3.2rem, 8vw, 5rem);
+    line-height: 0.82;
+    color: var(--java);
+    font-variant-numeric: lining-nums;
+  }
+  .a-titles { min-width: 0; }
+  .a-kicker {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .a-titles h2 { font-size: clamp(1.6rem, 3.6vw, 2.3rem); margin: 0 0 0.5rem; }
+  .a-theme { font-family: var(--serif); font-style: italic; font-size: 1.05rem; color: var(--ink-2); margin: 0; }
+
+  .a-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1.2rem;
+    padding: 1.1rem 0 0;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1.4rem;
+  }
+  .a-meta dt {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.3rem;
+  }
+  .a-meta dd { margin: 0; font-size: 0.88rem; color: var(--ink-2); }
+
+  /* ---------- question entry ---------- */
+  .q { padding: 2rem 0 1.9rem; border-bottom: 1px solid var(--rule); }
+  .q-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.85rem; margin-bottom: 0.8rem; }
+  .q-id {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.63rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid currentColor;
+  }
+  .tag-java { color: var(--java); background: var(--java-soft); }
+  .tag-dsa  { color: var(--dsa);  background: var(--dsa-soft); }
+  .q-head h4 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.35rem;
+    margin: 0;
+    flex-basis: 100%;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+  .q-brief { color: var(--ink-2); max-width: 46rem; }
+
+  .q-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 0 2.5rem; margin-top: 1.1rem; }
+  .q-block h5 {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+  .q-block ul { font-size: 0.925rem; }
+
+  .q-foot { margin-top: 1.1rem; display: flex; flex-direction: column; gap: 0.55rem; }
+  .q-foot p { margin: 0; font-size: 0.9rem; color: var(--ink-2); }
+  .lbl {
+    font-family: var(--mono);
+    font-size: 0.63rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-right: 0.55rem;
+  }
+  .q-foot .why .lbl { color: var(--java); }
+  .q-foot .stretch .lbl { color: var(--dsa); }
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--java);
+    padding: 1.2rem 1.4rem;
+    margin: 1.5rem 0;
+  }
+  .callout h3 { margin-top: 0; }
+  .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+
+  hr.thin { border: 0; border-top: 1px solid var(--rule); margin: 3rem 0 0; }
+
+  footer.colophon {
+    margin-top: 4.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+  }
+
+  :focus-visible { outline: 2px solid var(--java); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  @media (max-width: 34rem) {
+    .a-head { grid-template-columns: 1fr; gap: 0.5rem; }
+    .a-num { font-size: 3rem; }
+  }
+</style>
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-mark">Java Foundations Track</span>
+    <a href="#ground">Ground rules</a>
+    <a href="#a1">01 Fundamentals</a>
+    <a href="#a2">02 Collections</a>
+    <a href="#a3">03 OOP</a>
+    <a href="#a4">04 Generics &amp; Concurrency</a>
+    <a href="#rubric">Rubric</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Fresher Onboarding &middot; Engineering</p>
+    <h1>Java Foundations Track</h1>
+    <p class="standfirst">Four assignments, twenty-four problems. Each one is a small, self-contained program &mdash; and each one is a miniature of something we genuinely run in production: parsing a vendor file drop, deduping a patient roster, retrying a flaky bot step, merging a provider's visit intervals. By the end you will have written, in Java, a rough sketch of our stack.</p>
+
+    <dl class="mast-facts">
+      <div class="fact"><dt>Assignments</dt><dd>4</dd></div>
+      <div class="fact"><dt>Questions each</dt><dd>4 Java + 2 DSA</dd></div>
+      <div class="fact"><dt>Pace</dt><dd>1 week each</dd></div>
+      <div class="fact"><dt>Language level</dt><dd>Java 21 LTS</dd></div>
+      <div class="fact"><dt>Review</dt><dd>Live walkthrough</dd></div>
+    </dl>
+  </header>
+
+  <!-- ============ GROUND RULES ============ -->
+  <section class="band" id="ground">
+    <h2>Before you start</h2>
+    <p class="lede">Read this once properly. Most of the marks that get lost in review are lost here, not in the algorithms.</p>
+
+    <h3>Environment</h3>
+    <ul>
+      <li><strong>JDK 21</strong> (Temurin or Oracle), the current LTS. Confirm with <code>java -version</code> and <code>javac -version</code> &mdash; both must say 21. Preview features stay off: String Templates, Structured Concurrency and Scoped Values are not on the syllabus.</li>
+      <li><strong>Maven</strong> project, one module, package root <code>com.signia.training</code>. One sub-package per assignment: <code>a01basics</code>, <code>a02collections</code>, <code>a03oop</code>, <code>a04advanced</code>.</li>
+      <li><strong>IntelliJ IDEA Community</strong> is the house default. Learn the debugger in week one &mdash; breakpoints, step into/over, watch expressions, evaluate expression. You will use it more than you use <code>System.out.println</code>.</li>
+      <li><strong>Git</strong>. One branch per assignment: <code>training/&lt;yourname&gt;/assignment-1</code>. Commit as you go, not once at the end. We read the commit history.</li>
+      <li><strong>No third-party libraries.</strong> JDK standard library only. The single exception is JUnit 5, from Assignment 2 onward, for tests. No Apache Commons, no Guava, no OpenCSV, no Lombok &mdash; you are here to learn what those libraries do for you.</li>
+    </ul>
+
+    <h3>What you hand in</h3>
+    <ul>
+      <li>Working code that compiles clean &mdash; zero warnings you cannot explain.</li>
+      <li>A <code>README.md</code> per assignment: how to run each question, what you assumed, what you could not finish and why. A short honest README beats a long vague one.</li>
+      <li>Sample input files committed alongside the code, under <code>src/main/resources/</code>. If your program reads a CSV, that CSV is part of the submission.</li>
+      <li>Console output of a successful run, pasted into the README or committed as a <code>.txt</code>. We should not have to run it to see that it worked &mdash; but we will run it anyway.</li>
+    </ul>
+
+    <div class="callout">
+      <h3>On using AI</h3>
+      <p>You may use it. You may not hide behind it. The review is a live walkthrough where you will be asked to explain any line, change a requirement on the spot, and predict what the program does before running it. Code you cannot defend counts as code you did not write, whatever generated it. The reviewer's actual question is <em>"why this and not that?"</em> &mdash; and there is no tool that answers that for you.</p>
+    </div>
+
+    <h3>Standing rules for every question</h3>
+    <ul>
+      <li><strong>No hardcoded absolute paths.</strong> Read from <code>args[]</code> or the classpath. <code>C:\Users\you\Desktop\file.csv</code> fails on the reviewer's machine, which is the whole point.</li>
+      <li><strong>Every stream, reader and writer is closed</strong> &mdash; use try-with-resources. This is not style advice; we have shipped a production memory leak that was exactly this.</li>
+      <li><strong>Never swallow an exception.</strong> An empty <code>catch</code> block, or one containing only <code>e.printStackTrace()</code>, is an automatic finding in review.</li>
+      <li><strong>Never print real-looking patient data</strong> beyond the synthetic fixtures we give you. Get in the habit now: when you log an identifier, mask it.</li>
+      <li><strong>Name things fully.</strong> <code>patientCount</code>, not <code>pc</code>. <code>i</code> and <code>j</code> are fine as loop indices and nowhere else.</li>
+    </ul>
+  </section>
+
+  <hr class="thin" />
+
+  <!-- ============ ASSIGNMENT 1 ============ -->
+  <section class="assignment" id="a1">
+    <div class="a-head">
+      <div class="a-num">01</div>
+      <div class="a-titles">
+        <span class="a-kicker">Assignment One</span>
+        <h2>Syntax, Files &amp; the Console</h2>
+        <p class="a-theme">Read it, validate it, write it back out.</p>
+      </div>
+    </div>
+    <dl class="a-meta">
+      <div><dt>Focus</dt><dd>Types, control flow, arrays, <code>String</code>, <code>Scanner</code>, file I/O, exceptions</dd></div>
+      <div><dt>Prerequisite</dt><dd>None. Start here even if you have written Java before.</dd></div>
+      <div><dt>Deliverable</dt><dd>6 runnable <code>main</code> classes + README</dd></div>
+    </dl>
+
+    <article class="q" id="a1q1">
+      <div class="q-head">
+        <span class="q-id">A1 &middot; Q1</span><span class="tag tag-java">Core Java</span>
+        <h4>Patient Intake Console</h4>
+      </div>
+      <p class="q-brief">A menu-driven console app that captures a patient intake record field by field, refusing to move on until each field is valid. This is the "hello world" of every line-of-business system ever written.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>A loop-driven menu: <em>1. New intake &nbsp; 2. List captured &nbsp; 3. Exit</em>.</li>
+            <li>Capture MRN, first name, last name, date of birth (<code>dd-MM-yyyy</code>), phone, and visit type chosen from a numbered list.</li>
+            <li>Validate every field and re-prompt on failure with a message that says what was wrong &mdash; <em>"DOB must be dd-MM-yyyy, you entered 1990/05/12"</em>, not <em>"Invalid input"</em>.</li>
+            <li>Store records in a fixed-size array of a simple <code>Patient</code> class; refuse gracefully when full.</li>
+            <li>Print the captured list with <code>System.out.printf</code> in aligned columns.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Exactly one <code>Scanner</code> instance for the whole program. Do not open a new one per read, and never close <code>System.in</code> mid-run.</li>
+            <li>Handle the <code>nextInt()</code> / <code>nextLine()</code> newline trap deliberately &mdash; write a comment explaining what it is.</li>
+            <li>Catch <code>InputMismatchException</code> and recover without crashing.</li>
+            <li>Use <code>switch</code> (the arrow form), <code>while</code>, <code>do-while</code>, and at least one ternary.</li>
+            <li>No collections. Arrays only &mdash; that is the point of week one.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Every bot we run starts by accepting a job configuration from outside and refusing to proceed on bad input. Failing loudly and early at the boundary is the habit being trained.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add option 4: save all captured records to a CSV, then reload them on next launch if the file exists.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a1q2">
+      <div class="q-head">
+        <span class="q-id">A1 &middot; Q2</span><span class="tag tag-java">Core Java</span>
+        <h4>CSV Reader to Filtered Report</h4>
+      </div>
+      <p class="q-brief">Read a patient roster CSV, parse it into objects, filter it, and write a human-readable report file. Roughly 40% of the code we maintain is some version of this sentence.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Read <code>patients.csv</code> (header row + data) with <code>BufferedReader</code>.</li>
+            <li>Map each row to a <code>Patient</code> object; skip and <em>report</em> malformed rows rather than dying on them.</li>
+            <li>Filter: age &ge; 65 <strong>or</strong> <code>visitType</code> equals <code>HOSPICE</code>.</li>
+            <li>Write <code>eligible-patients.txt</code> with aligned columns, a title line, and a footer: <em>"12 of 200 rows eligible, 3 rows skipped."</em></li>
+          </ul>
+<pre><code>mrn,lastName,firstName,dob,visitType,provider
+MRN00042,Alvarez,Rosa,1948-03-11,HOSPICE,K. Rao
+MRN00043,Bell,Thomas,1979-11-02,ROUTINE,K. Rao</code></pre>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>try-with-resources for both the reader and the writer. No <code>finally { close(); }</code>.</li>
+            <li>Use <code>String.split(",", -1)</code> and explain in a comment why the <code>-1</code> limit matters for trailing empty fields.</li>
+            <li>Compute age from <code>LocalDate</code> and <code>Period</code>, not by subtracting years.</li>
+            <li>A missing input file must produce one clear line of output and exit code 1 &mdash; not a stack trace.</li>
+            <li>Read the file exactly once. No loading it twice to count rows.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Vendors send us flat files daily. They arrive malformed more often than you would believe, and a job that dies on row 4,000 of 10,000 is worse than one that reports and continues.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Handle quoted fields containing commas &mdash; <code>"Alvarez, Jr.",Rosa</code>. Write the parser character by character. You will now understand why CSV libraries exist.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a1q3">
+      <div class="q-head">
+        <span class="q-id">A1 &middot; Q3</span><span class="tag tag-java">Core Java</span>
+        <h4>Identifier &amp; Date Normalizer</h4>
+      </div>
+      <p class="q-brief">A static utility class of pure functions for cleaning up the messy identifiers that arrive from upstream systems. No state, no I/O, entirely testable.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><code>normalizeMrn(String)</code> &mdash; trim, uppercase, drop every non-alphanumeric character, left-pad with zeros to 8 characters. Reject anything longer than 8 after cleaning.</li>
+            <li><code>toIsoDate(String)</code> &mdash; accept <code>dd/MM/yyyy</code>, <code>dd-MM-yyyy</code>, <code>MM/dd/yyyy</code> and <code>yyyyMMdd</code>; return <code>yyyy-MM-dd</code>. Ambiguous inputs must throw, not guess.</li>
+            <li><code>maskPhi(String fullName)</code> &mdash; <code>"Rosa Alvarez"</code> becomes <code>"R*** A*****"</code>, preserving length.</li>
+            <li><code>main</code> that runs at least five cases per method, including the failure cases, and prints a pass/fail line for each.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Write <code>normalizeMrn</code> twice: once with a <code>char</code> loop and <code>StringBuilder</code>, once with a regex. Keep both. Comment on which you would ship and why.</li>
+            <li>Use <code>DateTimeFormatter</code> &mdash; not <code>SimpleDateFormat</code>, which is not thread-safe. Say so in a comment.</li>
+            <li>Never use <code>+=</code> to build a string inside a loop. Know why.</li>
+            <li>Private constructor so the utility class cannot be instantiated.</li>
+            <li>Null and empty input must be handled explicitly on every method.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Identifier normalization is where our matching logic lives or dies. <code>mrn00042</code>, <code>MRN-00042</code> and <code>42</code> are the same patient, and something has to decide that.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add <code>levenshtein(String, String)</code> and use it to flag near-duplicate surnames within one file.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a1q4">
+      <div class="q-head">
+        <span class="q-id">A1 &middot; Q4</span><span class="tag tag-java">Core Java</span>
+        <h4>File Drop Validator with Error Codes</h4>
+      </div>
+      <p class="q-brief">Given a folder of incoming CSV files, validate each one against an expected shape and emit coded, machine-greppable findings. This is a stripped-down version of a tool we actually run.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Walk a directory given on the command line; process every <code>*.csv</code> in it.</li>
+            <li>Checks, in order: file exists and is readable; file is non-empty; header matches the expected column list exactly; every row's column count matches the header; mandatory columns (<code>mrn</code>, <code>dob</code>) are non-blank.</li>
+            <li>A custom checked <code>ValidationException</code> carrying an error code, the file name and the row number.</li>
+            <li>Print a summary table at the end: file, rows read, findings by code. Exit <code>0</code> if clean, <code>1</code> if any file failed.</li>
+          </ul>
+<pre><code>TRN.1.1  FILE_EMPTY
+TRN.1.2  HEADER_MISMATCH
+TRN.2.1  COLUMN_COUNT_MISMATCH
+TRN.2.2  MANDATORY_FIELD_BLANK
+TRN.2.3  DUPLICATE_KEY</code></pre>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Codes live in one <code>enum</code> with a code string and a message template &mdash; not scattered string literals.</li>
+            <li>One bad file must not stop the other files from being validated. Collect findings, do not fail fast at the top level.</li>
+            <li>Use <code>java.nio.file.Files</code> and <code>Path</code>, not the legacy <code>File</code> API.</li>
+            <li>Expected headers come from a config file or a constant &mdash; not inlined in three different methods.</li>
+            <li>Findings print in stable, sorted order so two runs on the same input produce identical output.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Our alerting keys off structured error codes. A log line that says "something went wrong" cannot be routed, counted, or dashboarded; <code>TRN.2.2</code> can.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Emit the findings as a JSON file as well as a table &mdash; hand-written, no library. It will be uglier than you expect, and that is the lesson.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a1q5">
+      <div class="q-head">
+        <span class="q-id">A1 &middot; Q5</span><span class="tag tag-dsa">DSA</span>
+        <h4>Duplicate Detection, Three Ways</h4>
+      </div>
+      <p class="q-brief">Find duplicate MRNs in a large array using three different strategies, then measure them. The answer matters less than the measurement.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Generate 100,000 synthetic MRNs with a known number of planted duplicates, using a seeded <code>Random</code> so runs are reproducible.</li>
+            <li><strong>(a)</strong> Nested-loop comparison, O(n&sup2;). Count the comparisons performed.</li>
+            <li><strong>(b)</strong> Sort, then scan adjacent pairs, O(n log n).</li>
+            <li><strong>(c)</strong> Single pass with a <code>HashSet</code>, O(n).</li>
+            <li>Each returns the first duplicate found and the full set of duplicated values. Time each with <code>System.nanoTime()</code>.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>All three must agree on the set of duplicates. Assert it in code &mdash; if they disagree, one of them is wrong.</li>
+            <li>Run (a) on a reduced input if it takes over 30 seconds, and say so in your output.</li>
+            <li>Write three to four sentences in the README: which won, by what factor, and what each one costs in <em>memory</em> as well as time.</li>
+            <li>State the time and space complexity of each in a comment above the method.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Duplicate patient keys inside a single vendor drop are a real and recurring defect. Once the file is large enough, the naive answer stops being an answer.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Return the <em>indices</em> of every occurrence, not just the values, without changing the O(n) complexity.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a1q6">
+      <div class="q-head">
+        <span class="q-id">A1 &middot; Q6</span><span class="tag tag-dsa">DSA</span>
+        <h4>Fixed-Width Record Parser with Checksum</h4>
+      </div>
+      <p class="q-brief">Older clinical systems still emit fixed-width flat files. Parse one by column position and verify each line's trailing checksum.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Parse each line by position, using <code>substring</code> only &mdash; no <code>split</code>, no regex.</li>
+            <li>Trim the space padding from each extracted field.</li>
+            <li>Verify the checksum: sum the ASCII values of characters 0&ndash;50, take <code>% 97</code>, zero-pad to 2 digits, compare with the final field.</li>
+            <li>Report every line number whose checksum fails, and every line whose length is wrong, then print totals.</li>
+          </ul>
+<pre><code>cols  0- 7  MRN        (8)
+cols  8-27  LAST NAME  (20)
+cols 28-42  FIRST NAME (15)
+cols 43-50  DOB        (8, yyyyMMdd)
+cols 51-52  CHECKSUM   (2)</code></pre>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Never let <code>substring</code> throw. Short and over-long lines are data errors to be reported, not crashes.</li>
+            <li>Column boundaries are declared once as constants &mdash; changing a width must mean editing one line.</li>
+            <li>Process the file line by line. Do not read it fully into memory; assume it could be 2 GB.</li>
+            <li>Report the first 10 failures in detail, then just a count. Nobody reads 40,000 error lines.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Positional parsing and integrity checks are exactly what an interface with a legacy EHR looks like. Also: this is where you learn that off-by-one is not a joke.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Make the layout data-driven &mdash; read the field name, offset and length from a small schema file, so the same parser handles a second layout with no code change.</p>
+      </div>
+    </article>
+  </section>
+
+  <hr class="thin" />
+
+  <!-- ============ ASSIGNMENT 2 ============ -->
+  <section class="assignment" id="a2">
+    <div class="a-head">
+      <div class="a-num">02</div>
+      <div class="a-titles">
+        <span class="a-kicker">Assignment Two</span>
+        <h2>Collections</h2>
+        <p class="a-theme">Choosing the right container is most of the design.</p>
+      </div>
+    </div>
+    <dl class="a-meta">
+      <div><dt>Focus</dt><dd><code>List</code>, <code>Set</code>, <code>Map</code>, <code>Deque</code>, <code>Comparator</code>, iteration, hashing, sequenced collections</dd></div>
+      <div><dt>Prerequisite</dt><dd>Assignment 1 reviewed and signed off</dd></div>
+      <div><dt>Hard rule</dt><dd>No Stream API anywhere in this assignment. Loops only.</dd></div>
+    </dl>
+
+    <article class="q" id="a2q1">
+      <div class="q-head">
+        <span class="q-id">A2 &middot; Q1</span><span class="tag tag-java">Core Java</span>
+        <h4>Group and Summarize Visits</h4>
+      </div>
+      <p class="q-brief">Take a flat list of clinical visits and turn it into the three summaries a coordinator actually asks for &mdash; using maps and loops, so that when you meet <code>Collectors.groupingBy</code> in Assignment 4 you know precisely what it replaced.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>A <code>Visit</code> class: <code>visitId</code>, <code>mrn</code>, <code>provider</code>, <code>LocalDate date</code>, <code>int durationMins</code>, <code>String status</code>.</li>
+            <li><code>Map&lt;String, List&lt;Visit&gt;&gt;</code> grouped by provider.</li>
+            <li><code>Map&lt;String, Integer&gt;</code> of total minutes per provider.</li>
+            <li><code>Map&lt;String, Map&lt;String, Integer&gt;&gt;</code> &mdash; per provider, a count of each status.</li>
+            <li>Print providers sorted by total minutes descending, then by name for ties.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Use <code>computeIfAbsent</code>, <code>merge</code> and <code>getOrDefault</code> &mdash; at least one of each. No <code>if (map.containsKey(k))</code> followed by <code>map.get(k)</code>.</li>
+            <li>Iterate with <code>entrySet()</code>, never <code>keySet()</code> plus a lookup per key. Explain the difference in a comment.</li>
+            <li>Choose <code>HashMap</code> vs <code>LinkedHashMap</code> vs <code>TreeMap</code> deliberately for each of the three maps, and justify each choice in one line.</li>
+            <li>No Streams. None.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Every operational report we produce is a group-by over a flat extract. Doing it by hand once means you will never be confused by a collector again.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add a provider with zero visits to the input universe and make sure they appear in the report with a count of 0. This is harder than it sounds and it is the bug we hit most often.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a2q2">
+      <div class="q-head">
+        <span class="q-id">A2 &middot; Q2</span><span class="tag tag-java">Core Java</span>
+        <h4>Two-Drop Reconciliation</h4>
+      </div>
+      <p class="q-brief">Yesterday's roster and today's roster. Work out what is new, what disappeared, what stayed, and what is duplicated inside each file &mdash; using set algebra rather than nested loops.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Load <code>yesterday.csv</code> and <code>today.csv</code> into sets of MRNs.</li>
+            <li>Report four buckets: <em>added</em>, <em>removed</em>, <em>unchanged</em>, and <em>duplicated within a single file</em>.</li>
+            <li>Print counts, then the first 10 members of each bucket in the order they appeared in the source file.</li>
+            <li>Write a <code>reconciliation-summary.txt</code> that a non-engineer could read.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Use <code>retainAll</code> and <code>removeAll</code> &mdash; but on defensive copies. Demonstrate the bug first: mutate the original set, show the wrong second answer, then fix it.</li>
+            <li>Preserving source order is a requirement, so pick your <code>Set</code> implementation accordingly and say why in a comment.</li>
+            <li>Detecting in-file duplicates requires something a <code>Set</code> alone cannot tell you. Solve it without loading the file twice.</li>
+            <li>Must handle 500,000 MRNs per file without running out of memory on default heap settings.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Day-over-day reconciliation is how we detect that an upstream feed silently truncated. The set operations are trivial; the mutation trap in the middle of them is not.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Reconcile on a composite key (MRN + date of birth) instead of MRN alone. You will need a proper key type &mdash; which is a preview of Assignment 3.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a2q3">
+      <div class="q-head">
+        <span class="q-id">A2 &middot; Q3</span><span class="tag tag-java">Core Java</span>
+        <h4>Multi-Key Sorting and Range Queries</h4>
+      </div>
+      <p class="q-brief">Sort the same visit list four different ways, and then make date-range lookups fast with a sorted map.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Sort by date descending, then provider ascending, then duration descending &mdash; written twice: once with <code>Comparator.comparing().thenComparing().reversed()</code>, once as a hand-written <code>compare()</code> method.</li>
+            <li>Implement <code>Comparable&lt;Visit&gt;</code> on <code>Visit</code> for its natural order (by <code>visitId</code>), and use <code>Collections.sort</code> with no comparator.</li>
+            <li>Build a <code>TreeMap&lt;LocalDate, List&lt;Visit&gt;&gt;</code> and implement <code>visitsBetween(LocalDate from, LocalDate to)</code> using <code>subMap</code>, <code>headMap</code> and <code>tailMap</code>.</li>
+            <li>Handle null providers with <code>Comparator.nullsLast</code>.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Both sort implementations must produce byte-identical output on the same input. Prove it in code.</li>
+            <li>Watch where <code>.reversed()</code> attaches &mdash; it reverses the whole chain, not the last key. Demonstrate the wrong version and the right one.</li>
+            <li>Be explicit about whether <code>subMap</code> bounds are inclusive, and get the end date right.</li>
+            <li>Write one paragraph on when <code>Comparable</code> is appropriate and when <code>Comparator</code> is. There is a right answer.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>"Show me everything for this provider between these dates, most recent first" is a request we serve constantly. Also, misplaced <code>.reversed()</code> is a genuinely common production bug.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Make the sort order configurable from a string like <code>"date:desc,provider:asc"</code> parsed at runtime into a composed <code>Comparator</code>.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a2q4">
+      <div class="q-head">
+        <span class="q-id">A2 &middot; Q4</span><span class="tag tag-java">Core Java</span>
+        <h4>Retry Queue and Safe Removal</h4>
+      </div>
+      <p class="q-brief">Model a queue of automation jobs that can fail and be re-attempted, then learn the three ways to remove elements from a list you are iterating &mdash; one of which throws.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>A <code>Job</code> class with <code>jobId</code>, <code>attempt</code>, <code>submittedAt</code>, <code>lastError</code>.</li>
+            <li>An <code>ArrayDeque&lt;Job&gt;</code> retry queue. Process jobs from the head; simulate ~30% failure; on failure increment <code>attempt</code> and push to the tail; after 3 attempts move to a dead-letter <code>List</code>.</li>
+            <li>Print a run log and a final tally: succeeded, dead-lettered, total attempts consumed.</li>
+            <li>Then: purge all dead-lettered jobs older than 7 days from the list, three ways &mdash; the broken <code>for-each</code> with <code>list.remove()</code>, then <code>Iterator.remove()</code>, then <code>removeIf</code>.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Keep the broken version, commented out, with the real <code>ConcurrentModificationException</code> stack trace pasted beneath it. We want to see that you caused it on purpose.</li>
+            <li>Use <code>ArrayDeque</code>, not <code>Stack</code> or <code>LinkedList</code>. Note in a comment why <code>Stack</code> is effectively deprecated.</li>
+            <li>Seed your <code>Random</code> so the run is reproducible.</li>
+            <li>Backoff is not required yet &mdash; that is Assignment 4. Just count attempts.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>This is the actual shape of our job runner: a work queue, bounded retries, and a dead-letter list somebody has to look at on Monday.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Swap the <code>ArrayDeque</code> for a <code>PriorityQueue</code> ordered by attempt count ascending, so first-time jobs are always tried before retries.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a2q5">
+      <div class="q-head">
+        <span class="q-id">A2 &middot; Q5</span><span class="tag tag-dsa">DSA</span>
+        <h4>LRU Cache, Twice</h4>
+      </div>
+      <p class="q-brief">A bounded cache for recently-fetched patient records, with O(1) get and put. Build it the easy way, then build it properly.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><strong>(a)</strong> <code>LinkedHashMap</code> in access-order mode with <code>removeEldestEntry</code> overridden. Roughly 15 lines.</li>
+            <li><strong>(b)</strong> From scratch: <code>HashMap&lt;K, Node&gt;</code> plus a doubly linked list you write yourself, with head/tail sentinel nodes.</li>
+            <li><strong>(c)</strong> <code>LinkedHashMap</code> in insertion order, driving recency by hand with the Java&nbsp;21 <code>SequencedMap</code> methods &mdash; <code>putLast</code> to promote, <code>pollFirstEntry</code> to evict.</li>
+            <li>Generic in both key and value: <code>LruCache&lt;K, V&gt;</code>.</li>
+            <li>Track hits, misses and evictions. Run a scripted access sequence through both and assert they evict identically, then print the hit rate.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Both <code>get</code> and <code>put</code> must be O(1). If you are scanning a list to find a node, you have the wrong data structure.</li>
+            <li>Sentinel head and tail nodes are required in (b) &mdash; they remove every null check from the unlink logic. Note how much shorter the code gets.</li>
+            <li>A <code>get</code> on an existing key counts as a use and must move that entry to most-recent.</li>
+            <li>Capacity of 0 or a negative capacity must be rejected at construction.</li>
+            <li>State the complexity of each operation in a comment.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>It is the most-asked data structure question in the industry, and separately, it is what you would build to stop re-fetching the same record 40 times in one run.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add a per-entry TTL so entries expire on time as well as on capacity. Decide whether you expire lazily on read or eagerly on a sweep, and defend it.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a2q6">
+      <div class="q-head">
+        <span class="q-id">A2 &middot; Q6</span><span class="tag tag-dsa">DSA</span>
+        <h4>Top-K Failing Steps</h4>
+      </div>
+      <p class="q-brief">Given a large run log, find the K workflow steps that fail most often &mdash; without sorting the whole thing.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Parse a log of lines shaped <code>timestamp|jobId|stepName|status</code>; count only <code>FAILED</code>.</li>
+            <li>Count occurrences with a <code>HashMap&lt;String, Integer&gt;</code>.</li>
+            <li>Select the top K with a <strong>min-heap of size K</strong> (<code>PriorityQueue</code>), so you never hold more than K candidates.</li>
+            <li>Tie-break alphabetically by step name so output is deterministic.</li>
+            <li>Also implement the sort-everything approach, and time both on a generated 1,000,000-line log.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>The heap solution must be O(n log k), not O(n log n). Write the complexity in a comment and be ready to justify it out loud.</li>
+            <li>Stream the log line by line. Do not read a million lines into a <code>List</code> first.</li>
+            <li>Get the comparator direction right &mdash; a min-heap for a top-K query is counter-intuitive and it is the whole trick. Explain it in two lines.</li>
+            <li>Handle K larger than the number of distinct steps.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>"Which step is breaking most this week" is the first question asked in every triage. Our real logs are large enough that the naive answer is slow enough to notice.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Report the top K per day as well as overall, and flag any step whose failure count more than doubled versus the previous day.</p>
+      </div>
+    </article>
+  </section>
+
+  <hr class="thin" />
+
+  <!-- ============ ASSIGNMENT 3 ============ -->
+  <section class="assignment" id="a3">
+    <div class="a-head">
+      <div class="a-num">03</div>
+      <div class="a-titles">
+        <span class="a-kicker">Assignment Three</span>
+        <h2>Objects, Abstraction &amp; Failure</h2>
+        <p class="a-theme">Model the domain, then model how it goes wrong.</p>
+      </div>
+    </div>
+    <dl class="a-meta">
+      <div><dt>Focus</dt><dd>Inheritance, interfaces, polymorphism, immutability, <code>equals</code>/<code>hashCode</code>, sealed types, pattern matching, exception design</dd></div>
+      <div><dt>Prerequisite</dt><dd>Assignments 1&ndash;2 signed off</dd></div>
+      <div><dt>New requirement</dt><dd>JUnit 5 tests for Q3 and Q4, minimum</dd></div>
+    </dl>
+
+    <article class="q" id="a3q1">
+      <div class="q-head">
+        <span class="q-id">A3 &middot; Q1</span><span class="tag tag-java">Core Java</span>
+        <h4>Workflow Template Method</h4>
+      </div>
+      <p class="q-brief">Every automation we run has the same skeleton and different innards. Express that with an abstract base class that owns the sequence and subclasses that own the steps.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><code>abstract class Workflow</code> with a <code>final void run()</code> that calls, in order: <code>login()</code>, <code>navigate()</code>, <code>extract()</code>, <code>logout()</code>.</li>
+            <li><code>login()</code> and <code>extract()</code> abstract; <code>navigate()</code> and <code>logout()</code> with sensible defaults.</li>
+            <li>Hooks <code>beforeStep(String)</code> and <code>afterStep(String, long durationMs)</code> that the base class calls around each step and that subclasses may override for logging.</li>
+            <li>Two subclasses &mdash; <code>PortalAWorkflow</code> and <code>PortalBWorkflow</code> &mdash; that print distinct behaviour and where exactly one overrides <code>logout()</code>.</li>
+            <li>Make <code>extract()</code> throw in one subclass, and prove that <code>logout()</code> still runs.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li><code>run()</code> is <code>final</code>. Subclasses control the steps, never the sequence. Write one line on why that matters.</li>
+            <li>Cleanup must be guaranteed with <code>finally</code> &mdash; and it must not mask the original exception when cleanup itself fails.</li>
+            <li>Protected, not public, for anything only subclasses need.</li>
+            <li>Include a comment contrasting this with achieving the same thing by composition. Which would you choose and when?</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>This is verbatim the base class our automations extend. Getting logout to run even when extraction explodes is the difference between a failed job and a failed job that also leaves a session locked.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add a <code>Duration</code> timing report per step, and a <code>dryRun</code> flag that runs the sequence and logs it without performing any step.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a3q2">
+      <div class="q-head">
+        <span class="q-id">A3 &middot; Q2</span><span class="tag tag-java">Core Java</span>
+        <h4>Interfaces, Polymorphism and a Factory</h4>
+      </div>
+      <p class="q-brief">One calling loop, three completely different file formats, zero <code>instanceof</code> checks.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><code>interface DataExtractor</code> with <code>List&lt;String[]&gt; extract(Path)</code>, <code>String name()</code>, a <code>default boolean supports(Path)</code> and a <code>static DataExtractor noop()</code>.</li>
+            <li>Three implementations: <code>CsvExtractor</code>, <code>FixedWidthExtractor</code> (reuse A1&middot;Q6), <code>PipeDelimitedExtractor</code>.</li>
+            <li><code>ExtractorFactory.forPath(Path)</code> selecting by extension, throwing <code>UnsupportedSourceException</code> when nothing matches.</li>
+            <li>A driver that iterates <code>List&lt;DataExtractor&gt;</code> and runs each over a folder, printing rows extracted per format.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>No <code>instanceof</code> and no casting in the calling loop. If you need one, the interface is wrong.</li>
+            <li>You must use both a <code>default</code> and a <code>static</code> interface method, and write one line each on when each is the right tool.</li>
+            <li>Adding a fourth format must require zero edits to the driver. Demonstrate this by actually adding a fourth one at the end.</li>
+            <li>The factory returns the interface type, never a concrete class.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>We integrate with a growing list of source systems. The value of this pattern is measured in how little changes when the eleventh one arrives.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Discover implementations at runtime with <code>ServiceLoader</code> instead of a hardcoded list, so a new extractor registers itself.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a3q3">
+      <div class="q-head">
+        <span class="q-id">A3 &middot; Q3</span><span class="tag tag-java">Core Java</span>
+        <h4>Immutable Record with a Builder</h4>
+      </div>
+      <p class="q-brief">Build a value object that cannot be corrupted after construction, then deliberately break its <code>hashCode</code> and watch a <code>HashSet</code> lose track of it.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><code>final class PatientRecord</code>: all fields <code>final</code>, no setters, defensive copies in and out for the mutable <code>List&lt;String&gt; diagnoses</code>.</li>
+            <li>A static nested <code>Builder</code> with a required <code>mrn</code> and optional everything else; <code>build()</code> validates and throws <code>IllegalStateException</code> listing every missing field at once.</li>
+            <li><code>equals</code> and <code>hashCode</code> based on <code>mrn</code> alone, with a comment justifying that identity choice.</li>
+            <li><code>toString()</code> that masks name and DOB.</li>
+            <li>JUnit tests: equal records collapse in a <code>HashSet</code>; the returned <code>diagnoses</code> list cannot mutate the original; the builder rejects an incomplete record.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Then break it: add a mutable field to <code>equals</code> but not <code>hashCode</code>, put the object in a <code>HashSet</code>, mutate it, and show that <code>contains</code> now returns false. Keep this as a failing-then-fixed test.</li>
+            <li>Do <em>not</em> use a Java <code>record</code> here &mdash; write it by hand. Then, at the bottom of the file, add the <code>record</code> equivalent as a comment and note what you got for free and what you lost.</li>
+            <li>No Lombok.</li>
+            <li>Every constructor argument validated; fail at construction, never later.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>A broken <code>hashCode</code> produces bugs that are invisible in testing and catastrophic in a caching layer. Seeing a <code>HashSet</code> fail to find an object it definitely contains is a formative experience.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add a <code>withDiagnosis(String)</code> method that returns a new instance rather than mutating &mdash; the copy-on-write style that makes immutability practical.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a3q4">
+      <div class="q-head">
+        <span class="q-id">A3 &middot; Q4</span><span class="tag tag-java">Core Java</span>
+        <h4>Layered Exception Hierarchy</h4>
+      </div>
+      <p class="q-brief">Design failure as carefully as you design success: an exception hierarchy that tells the caller whether to retry, and three layers that each handle what they are actually qualified to handle.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><code>sealed abstract class AppException permits TransientException, PermanentException</code>, carrying an error code and <code>boolean isRetryable()</code>. Transient covers timeout, connection reset and rate limited; permanent covers validation failed, not authorised and record not found.</li>
+            <li>The runner routes with an <strong>exhaustive <code>switch</code> pattern over the sealed hierarchy and no <code>default</code> branch</strong>, using a <code>when</code> guard so the decision depends on attempt count as well as type.</li>
+            <li>Then add a third exception type and watch that switch stop compiling. Paste the compiler error in as a comment &mdash; that error is the entire reason the type is sealed.</li>
+            <li>Three layers. <strong>Step</strong> throws raw low-level exceptions. <strong>Workflow</strong> catches and translates them into <code>AppException</code> subtypes with codes, always preserving the cause. <strong>Runner</strong> catches <code>AppException</code> and decides: retry, dead-letter, or abort the batch.</li>
+            <li>A custom <code>AutoCloseable</code> session object used in try-with-resources whose <code>close()</code> also throws &mdash; then print the <em>suppressed</em> exceptions.</li>
+            <li>A driver that triggers one of each failure class and prints the routing decision for each.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Never lose the cause. Every translation passes the original into the constructor, and your output must show the full chain.</li>
+            <li>No layer catches an exception it cannot act on. Passing it up untouched is a valid and often correct decision.</li>
+            <li>Include one example of the wrong pattern &mdash; <code>catch (Exception e) { e.printStackTrace(); }</code> &mdash; commented out, with two lines on exactly what it costs you.</li>
+            <li>Write a short README paragraph: checked or unchecked for <code>AppException</code>, and why you chose it. Both answers are defensible; an undefended one is not.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Retryable-versus-permanent is the single most important distinction in an automation platform. Retrying a validation failure 30 times wastes an hour; not retrying a timeout fails a job that would have worked.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add a <code>Map&lt;Class&lt;? extends Exception&gt;, ErrorCode&gt;</code> translation registry so the workflow layer maps by lookup instead of a <code>catch</code> ladder.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a3q5">
+      <div class="q-head">
+        <span class="q-id">A3 &middot; Q5</span><span class="tag tag-dsa">DSA</span>
+        <h4>Step Dependency Resolver</h4>
+      </div>
+      <p class="q-brief">Steps declare what they depend on. Work out a legal execution order, detect impossible ones, then work out what could run in parallel.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Read steps and their dependencies from a small text file into an adjacency structure.</li>
+            <li>Produce a valid linear execution order with Kahn's algorithm (in-degree + queue).</li>
+            <li>Detect cycles and report the actual step names in the cycle &mdash; not just "a cycle exists".</li>
+            <li>Produce <strong>parallel waves</strong>: wave 0 is everything with no dependencies, wave 1 is everything depending only on wave 0, and so on. Print each wave as a batch.</li>
+            <li>Report the critical path length &mdash; the number of waves &mdash; as the theoretical minimum runtime.</li>
+          </ul>
+<pre><code>login        ->
+fetchRoster  -> login
+fetchVisits  -> login
+mergeReport  -> fetchRoster, fetchVisits
+upload       -> mergeReport
+logout       -> upload</code></pre>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>O(V + E). No repeated scanning of the full graph per step.</li>
+            <li>A dependency on an undeclared step is an error with a clear message, not a silent skip.</li>
+            <li>Output must be deterministic &mdash; break ties alphabetically inside each wave.</li>
+            <li>Handle a graph with disconnected components, and a single step with no dependencies at all.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Our longer workflows have real step dependencies, and the wave computation is exactly how you would decide what to parallelise in Assignment 4.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Give each step a duration and compute the true critical path by longest weighted path, rather than by wave count.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a3q6">
+      <div class="q-head">
+        <span class="q-id">A3 &middot; Q6</span><span class="tag tag-dsa">DSA</span>
+        <h4>Config Validator and Undo Stack</h4>
+      </div>
+      <p class="q-brief">Two stack problems in one: validate a config file's nesting, then build an undo/redo history over typed commands.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><strong>(a)</strong> A validator for a config string containing <code>{}</code>, <code>[]</code>, <code>()</code> and paired quotes. On mismatch, report the character index, what was found, and what was expected.</li>
+            <li>Brackets inside a quoted string are literal text and must be ignored &mdash; this is the part people get wrong.</li>
+            <li><strong>(b)</strong> An <code>interface Command</code> with <code>apply()</code> and <code>revert()</code>. Implement three concrete commands over an in-memory record store: <code>SetField</code>, <code>AddDiagnosis</code>, <code>DeleteRecord</code>.</li>
+            <li>An <code>EditSession</code> with undo and redo <code>Deque</code>s. Applying a new command after an undo clears the redo stack &mdash; as every real editor does.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Part (a) must be a single pass, O(n), O(depth) space.</li>
+            <li><code>DeleteRecord.revert()</code> has to restore the deleted record &mdash; so the command must capture enough state at <code>apply()</code> time. Think about this before you write it.</li>
+            <li>Undo on an empty stack is a no-op with a message, never an exception.</li>
+            <li>Use <code>ArrayDeque</code>, not <code>Stack</code>.</li>
+            <li>Print the store's state after every operation so the run log reads as a proof.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Part (b) is the command pattern &mdash; the cleanest place where OOP and a data structure meet, and the model behind every reversible operation you will ever build.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add <code>CompositeCommand</code> that groups several commands into one undoable transaction, reverting them in reverse order.</p>
+      </div>
+    </article>
+  </section>
+
+  <hr class="thin" />
+
+  <!-- ============ ASSIGNMENT 4 ============ -->
+  <section class="assignment" id="a4">
+    <div class="a-head">
+      <div class="a-num">04</div>
+      <div class="a-titles">
+        <span class="a-kicker">Assignment Four</span>
+        <h2>Generics, Streams &amp; Concurrency</h2>
+        <p class="a-theme">Write it once, then make it run at the same time.</p>
+      </div>
+    </div>
+    <dl class="a-meta">
+      <div><dt>Focus</dt><dd>Generics, wildcards, functional interfaces, Stream API, <code>Optional</code>, executors, virtual threads, atomics</dd></div>
+      <div><dt>Prerequisite</dt><dd>Assignments 1&ndash;3 signed off</dd></div>
+      <div><dt>Weight</dt><dd>Hardest of the four. Budget two weeks if needed.</dd></div>
+    </dl>
+
+    <article class="q" id="a4q1">
+      <div class="q-head">
+        <span class="q-id">A4 &middot; Q1</span><span class="tag tag-java">Advanced Java</span>
+        <h4>Generic Result Type and Repository</h4>
+      </div>
+      <p class="q-brief">Two generic types you will use for the rest of your career: a result wrapper that carries either a value or a coded failure, and a typed repository interface.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><code>Result&lt;T&gt;</code> as a <strong>sealed interface over two records</strong> &mdash; <code>Ok&lt;T&gt;(T value)</code> and <code>Fail&lt;T&gt;(String code, String message)</code> &mdash; with factories <code>ok</code> / <code>fail</code>, plus <code>map</code>, <code>flatMap</code>, <code>orElse</code>, <code>ifOk</code>, <code>isOk</code>.</li>
+            <li>Implement <code>map</code> with an exhaustive switch and record deconstruction: <code>case Ok&lt;T&gt;(T value) -&gt; ...</code>. Holding both a value and an error becomes structurally impossible rather than merely checked.</li>
+            <li><code>interface Repository&lt;T, ID&gt;</code>: <code>Optional&lt;T&gt; findById(ID)</code>, <code>List&lt;T&gt; findAll()</code>, <code>T save(T)</code>, <code>boolean deleteById(ID)</code>.</li>
+            <li><code>class MapRepository&lt;T extends Identifiable&lt;ID&gt;, ID&gt;</code> implementing it over a <code>ConcurrentHashMap</code>.</li>
+            <li>One method taking <code>List&lt;? extends Number&gt;</code> and one taking <code>List&lt;? super Integer&gt;</code>, with a comment explaining PECS on each.</li>
+            <li>A short demo chaining three <code>map</code> calls where the middle one fails, showing the failure short-circuits with its code intact.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Demonstrate type erasure: try to overload one method for <code>List&lt;String&gt;</code> and <code>List&lt;Integer&gt;</code>, paste the compiler error as a comment, and explain it.</li>
+            <li><code>Result</code> is immutable and never holds both a value and an error.</li>
+            <li>Zero unchecked-cast warnings. If you need <code>@SuppressWarnings</code>, justify it in the annotation's comment.</li>
+            <li>No raw types anywhere. <code>List</code> without a type argument is a finding.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>A coded <code>Result</code> is how a step reports failure without throwing across a boundary where an exception would be the wrong control flow. You will meet this shape in every service we run.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add <code>Result.combine(List&lt;Result&lt;T&gt;&gt;)</code> that returns ok only if all are ok, and otherwise aggregates every error code.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a4q2">
+      <div class="q-head">
+        <span class="q-id">A4 &middot; Q2</span><span class="tag tag-java">Advanced Java</span>
+        <h4>Generic Retry with Backoff</h4>
+      </div>
+      <p class="q-brief">One reusable method that can retry <em>any</em> operation. This is the single most-copied utility in our codebase, so write it properly.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li><code>static &lt;T&gt; T retry(ThrowingSupplier&lt;T&gt; action, int maxAttempts, long baseDelayMs, Predicate&lt;Exception&gt; isRetryable) throws Exception</code>.</li>
+            <li>Exponential backoff with jitter: attempt <em>n</em> waits roughly <code>base * 2^(n-1)</code>, plus a random fraction.</li>
+            <li>Your own <code>@FunctionalInterface ThrowingSupplier&lt;T&gt;</code>, because <code>java.util.function.Supplier</code> cannot throw checked exceptions.</li>
+            <li>An overload for a void <code>ThrowingRunnable</code>, implemented by delegating to the <code>T</code> version rather than duplicating the logic.</li>
+            <li>Test with a flaky action that fails twice and succeeds on the third attempt, and with one that always fails permanently &mdash; the second must not retry at all.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>A non-retryable exception must be rethrown immediately, on attempt one. Retrying a validation failure is a bug.</li>
+            <li>On final failure, throw the <em>last</em> exception with the earlier ones attached as suppressed. Do not lose attempt history.</li>
+            <li>Restore the interrupt flag if <code>Thread.sleep</code> throws <code>InterruptedException</code>. Explain why in a comment.</li>
+            <li>Log each attempt: attempt number, delay, exception type. Never log the exception's message blindly &mdash; it might carry data you should not write to disk.</li>
+            <li>Reuse <code>AppException.isRetryable()</code> from Assignment 3 as the default predicate.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Everything that touches a network fails intermittently. Retry-with-backoff is the difference between a platform that works and one that pages someone at 3am.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add a circuit breaker: after N consecutive failures across all calls, fail fast for the next 60 seconds without even attempting.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a4q3">
+      <div class="q-head">
+        <span class="q-id">A4 &middot; Q3</span><span class="tag tag-java">Advanced Java</span>
+        <h4>The Same Report, in Streams</h4>
+      </div>
+      <p class="q-brief">Rebuild Assignment 2 Q1 with the Stream API, then decide honestly which version you would rather maintain.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Visits per provider (<code>groupingBy</code> + <code>counting</code>), total and average duration (<code>summingInt</code>, <code>averagingInt</code>).</li>
+            <li>Top 3 providers by minutes (<code>sorted</code> + <code>limit</code>), and a completed/cancelled split with <code>partitioningBy</code>.</li>
+            <li>Every distinct diagnosis across all patients using <code>flatMap</code> + <code>distinct</code> + <code>sorted</code>.</li>
+            <li>A <code>Map&lt;String, String&gt;</code> of provider to busiest date via <code>Collectors.toMap</code> with a merge function &mdash; and then deliberately remove the merge function to see the <code>IllegalStateException</code> it prevents.</li>
+            <li>Proper <code>Optional</code> use throughout: <code>map</code>, <code>filter</code>, <code>orElseGet</code>. No <code>.get()</code> without a guard.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Output must be identical to your Assignment 2 Q1 output. Diff the two files &mdash; that is the test.</li>
+            <li>No side effects inside a stream. Never mutate an external collection from inside <code>forEach</code>; collect instead.</li>
+            <li>Do not use <code>parallelStream()</code> here. Note in a comment when it would actually help and when it makes things slower.</li>
+            <li>README: name two of these that were clearer as loops, and two that were clearly better as streams. Preferring loops is an acceptable answer if you can argue it.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Streams are everywhere in our services. Writing the same logic both ways is the fastest route to judgement about when they help and when they are just shorter.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Write a custom <code>Collector</code> that computes count, sum, min, max and average in a single pass, and use it instead of four separate collectors.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a4q4">
+      <div class="q-head">
+        <span class="q-id">A4 &middot; Q4</span><span class="tag tag-java">Advanced Java</span>
+        <h4>Concurrent Job Runner</h4>
+      </div>
+      <p class="q-brief">Run many simulated automation jobs across a thread pool, then reproduce and fix a lost-update race with your own eyes.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>50 simulated jobs, each sleeping a random 100&ndash;800ms and failing ~20% of the time.</li>
+            <li>Version one with <code>ExecutorService</code>, <code>Callable</code> and <code>invokeAll</code>, collecting <code>Future</code> results and handling <code>ExecutionException</code>.</li>
+            <li>Version two with <code>CompletableFuture</code>: <code>supplyAsync</code>, <code>thenApply</code>, <code>exceptionally</code>, joined by <code>allOf</code>.</li>
+            <li>Version three with <strong>virtual threads</strong> &mdash; <code>Executors.newVirtualThreadPerTaskExecutor()</code>, one per job, no pool sizing at all. Then re-run versions one and three at 10,000 jobs, where the difference stops being academic.</li>
+            <li>A shared success counter, four ways: a plain <code>int</code> (run 10,000 increments across 8 threads and show the total is wrong), then <code>synchronized</code>, then <code>AtomicInteger</code>, then <code>ConcurrentHashMap.merge</code> for per-status counts.</li>
+            <li>Print sequential wall time versus parallel wall time and the speedup ratio.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Always shut down: <code>shutdown()</code>, then <code>awaitTermination</code>, then <code>shutdownNow()</code> if it times out. A leaked non-daemon pool keeps the JVM alive &mdash; demonstrate that once, then fix it.</li>
+            <li><strong>Do not pool virtual threads.</strong> They are cheap to create and built to be blocked; pooling re-imposes the scarcity they exist to remove.</li>
+            <li>On Java&nbsp;21 a virtual thread blocking inside <code>synchronized</code> <strong>pins</strong> its carrier and cannot unmount. Your <code>synchronized</code> counter is a live example &mdash; reproduce it, then show <code>ReentrantLock</code> behaving differently.</li>
+            <li>The lost-update demo must actually lose updates. If your run happens to come out correct, raise the iteration count until it does not.</li>
+            <li>No <code>Thread</code> created with <code>new</code>. Executors only.</li>
+            <li>Never <code>catch (InterruptedException e) {}</code>. Restore the flag.</li>
+            <li>Speedup for the fixed pool will not be 4&times;. Explain the gap &mdash; then explain separately why the virtual-thread version scales differently as job count grows.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Our runners execute many jobs concurrently against a bounded pool. Shared mutable state under concurrency is where the hardest bugs of your career will come from, and the only cure is having caused one deliberately.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Add a per-host rate limit with <code>Semaphore</code>, so at most 2 jobs targeting the same host run at once while the pool stays busy with others.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a4q5">
+      <div class="q-head">
+        <span class="q-id">A4 &middot; Q5</span><span class="tag tag-dsa">DSA</span>
+        <h4>Failure-Burst Detector</h4>
+      </div>
+      <p class="q-brief">Given a time-ordered event stream, raise an alert whenever K failures land inside any W-millisecond window. A sliding window over time rather than over indices.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Read events <code>(epochMillis, jobId, status)</code> in timestamp order.</li>
+            <li>Maintain an <code>ArrayDeque</code> of failure timestamps; evict from the head anything older than <code>now - W</code>; alert when the deque size reaches K.</li>
+            <li>Each alert reports window start, window end, the count, and the offending job IDs.</li>
+            <li>Suppress duplicate alerts &mdash; one alert per burst, not one per event once the threshold is crossed.</li>
+            <li>Second implementation: fixed one-minute buckets counting failures per minute. Compare the two.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>O(n) overall. Each event is pushed and popped at most once &mdash; state that clearly in a comment.</li>
+            <li>Single pass, no re-scanning the event list per window.</li>
+            <li>Handle out-of-order timestamps by rejecting them with a clear message, and say what you would do instead in a real system.</li>
+            <li>K and W come from the command line, not constants.</li>
+            <li>Three lines in the README on the trade-off: exact sliding window versus bucketed counters, in memory and in accuracy.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>This is the alerting rule we want on our own job runs: not "a job failed" but "an unusual number failed in a short time", which is the one worth waking up for.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Alert on failure <em>rate</em> instead of count &mdash; more than 30% of jobs in the window failed, with a minimum sample size so 1-of-2 does not trigger it.</p>
+      </div>
+    </article>
+
+    <article class="q" id="a4q6">
+      <div class="q-head">
+        <span class="q-id">A4 &middot; Q6</span><span class="tag tag-dsa">DSA</span>
+        <h4>Merge Visit Intervals and Search Them</h4>
+      </div>
+      <p class="q-brief">Collapse a provider's overlapping appointments into contiguous busy blocks, find the largest gap, then answer "were they busy at 14:20?" in logarithmic time.</p>
+      <div class="q-grid">
+        <div class="q-block">
+          <h5>Build</h5>
+          <ul>
+            <li>Sort intervals <code>[start, end)</code> by start, merge overlapping and touching ones in a single linear pass.</li>
+            <li>Report total booked minutes, total free minutes inside working hours, and the largest free gap with its start and end times.</li>
+            <li>Detect double-bookings &mdash; the specific pairs that overlap &mdash; before merging.</li>
+            <li>A hand-written binary search over the merged list answering <code>isBusyAt(LocalTime)</code>.</li>
+            <li>Verify against <code>Collections.binarySearch</code> with a custom <code>Comparator</code>, and explain the negative return value's meaning as an insertion point.</li>
+          </ul>
+        </div>
+        <div class="q-block">
+          <h5>Constraints</h5>
+          <ul>
+            <li>Half-open intervals throughout: an appointment ending at 14:00 and one starting at 14:00 do <em>not</em> overlap. Get this right and say so in a comment.</li>
+            <li>Sorting is O(n log n); the merge itself must be a single O(n) pass.</li>
+            <li>Binary search is O(log n) &mdash; a linear scan does not count, even though it would pass the tests.</li>
+            <li>Handle the empty list, one interval, and every interval overlapping every other.</li>
+            <li>JUnit tests covering each of those edge cases.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-foot">
+        <p class="why"><span class="lbl">Why here</span>Interval merging is how scheduling conflicts and coverage gaps get computed, and half-open interval discipline is the reason our reports agree with the client's.</p>
+        <p class="stretch"><span class="lbl">Stretch</span>Handle intervals for multiple providers at once and answer "who is free at 14:20 for at least 45 minutes?" &mdash; a sweep line over all providers.</p>
+      </div>
+    </article>
+  </section>
+
+  <hr class="thin" />
+
+  <!-- ============ RUBRIC ============ -->
+  <section class="band" id="rubric">
+    <h2>How each assignment is marked</h2>
+    <p class="lede">Scored out of 100 in a live review. Below 60 means a rework of the weak questions before moving on; the track is sequential and gaps compound.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Weight</th><th>Criterion</th><th>What full marks looks like</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num">35</td><td>Correctness</td><td>Produces the right answer on the given input and on the edge cases the question names. Meets every stated constraint, including the complexity ones.</td></tr>
+          <tr><td class="num">20</td><td>Code quality</td><td>Honest names, small methods, no duplication, no dead code, no commented-out experiments left behind &mdash; except the ones a question explicitly asks you to keep.</td></tr>
+          <tr><td class="num">15</td><td>Failure handling</td><td>Resources closed, exceptions neither swallowed nor blanket-caught, bad input reported clearly, nothing crashes on a malformed row.</td></tr>
+          <tr><td class="num">15</td><td>Proof of work</td><td>Tests where required, run output committed, complexity stated where required, and the deliberate-bug demonstrations actually demonstrated.</td></tr>
+          <tr><td class="num">15</td><td>Explanation</td><td>You can walk through any line, justify each design choice, and correctly predict the program's behaviour under a change the reviewer invents on the spot.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What the reviewer will actually do</h3>
+    <ul>
+      <li>Run your code on an input file you have not seen. It will contain a blank line, a duplicate key, and a row with the wrong column count.</li>
+      <li>Pick one method and ask you to change its behaviour live.</li>
+      <li>Ask "what happens if this is null?" at least once per assignment.</li>
+      <li>Ask you to name a thing you tried that did not work. There should be one.</li>
+    </ul>
+
+    <div class="callout">
+      <h3>Getting unstuck</h3>
+      <p>Time-box it to 45 minutes. Then ask &mdash; in the team channel, not privately, so the answer is useful to everyone. Bring what you tried, the exact error, and what you think it means. "It doesn't work" starts a twenty-minute conversation; "I expect X here, I get Y, and I think it is because Z" starts a two-minute one.</p>
+      <p>Being stuck is not a mark against you. Being stuck quietly for three days is.</p>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <span>Java Foundations Track</span>
+    <span>4 assignments &middot; 24 questions</span>
+    <span>Java 21 LTS &middot; JDK standard library only</span>
+    <span>Engineering onboarding</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Fixture files are position- and line-ending-sensitive. Keep them LF everywhere.
+*.csv text eol=lf
+*.txt text eol=lf
+*.psv text eol=lf
+*.java text eol=lf
+*.md   text eol=lf
+*.xml  text eol=lf

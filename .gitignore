@@ -1,0 +1,28 @@
+target/
+out/
+build/
+bin/
+
+*.class
+*.jar
+*.war
+
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+
+.DS_Store
+Thumbs.db
+
+# Generated fixtures - regenerate with FixtureGenerator, never commit
+src/main/resources/generated/
+*.generated.txt
+*.generated.csv
+
+# Candidate run output belongs in your assignment folder, not at the root
+/run-output.txt

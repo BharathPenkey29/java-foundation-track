@@ -1,0 +1,14 @@
+MRN00042Alvarez             Rosa           1948031176
+MRN00043Bell                Thomas         1979110282
+MRN00044Chandrasekar        Meera          1955122079
+MRN00045Okonkwo             Ifeanyi        1963070418
+MRN00046Vasquez-Reed        Ana            1941091500
+MRN00047Fitzgerald          Sean           1988013091
+MRN00099Truncated
+MRN00048Nakamura            Yuki           1952022657
+MRN00049Oyelaran            Tunde          1970081942
+MRN00050Petrov              Irina          1946110786
+MRN00051Whitfield           Margaret       1939051299
+MRN00052Santos              Beatriz        1991100339
+MRN00053Abernathy           Josiah         1958062873
+MRN00054Delacroix           Henri          1967021487   TRAILING JUNK

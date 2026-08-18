@@ -1,0 +1,7 @@
+# 'mergeReport' depends on 'fetchClaims', which is never declared.
+# That is an error with a clear message, not a silent skip.
+
+login        ->
+fetchRoster  -> login
+mergeReport  -> fetchRoster, fetchClaims
+upload       -> mergeReport

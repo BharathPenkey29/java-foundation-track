@@ -1,0 +1,9 @@
+# The full roster of providers on the books.
+# Note that S. Okafor and R. Villanueva have no visits in visits.csv.
+# A correct report shows them with a count of zero rather than omitting them.
+K. Rao
+L. Byrne
+P. Adeyemi
+D. Marchetti
+S. Okafor
+R. Villanueva

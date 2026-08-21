@@ -1,0 +1,71 @@
+ROSTER RECONCILIATION SUMMARY
+============================
+
+This report compares yesterday's roster with today's roster.
+It identifies newly added patients, patients removed from the roster, patients present on both days, and duplicate records within each file.
+
+Added: 3000
+Earliest: MRN0500000
+Latest: MRN0502999
+First 10 members:
+  MRN0500000
+  MRN0500001
+  MRN0500002
+  MRN0500003
+  MRN0500004
+  MRN0500005
+  MRN0500006
+  MRN0500007
+  MRN0500008
+  MRN0500009
+
+Removed: 2000
+Earliest: MRN0000000
+Latest: MRN0001999
+First 10 members:
+  MRN0000000
+  MRN0000001
+  MRN0000002
+  MRN0000003
+  MRN0000004
+  MRN0000005
+  MRN0000006
+  MRN0000007
+  MRN0000008
+  MRN0000009
+
+Unchanged: 498000
+Earliest: MRN0002000
+Latest: MRN0499999
+First 10 members:
+  MRN0002000
+  MRN0002001
+  MRN0002002
+  MRN0002003
+  MRN0002004
+  MRN0002005
+  MRN0002006
+  MRN0002007
+  MRN0002008
+  MRN0002009
+
+Duplicates in yesterday's file: 999
+Earliest: MRN0050823
+Latest: MRN0363765
+First 10 members:
+  MRN0050823
+  MRN0483063
+  MRN0023687
+  MRN0292885
+  MRN0015589
+  MRN0290507
+  MRN0457053
+  MRN0304125
+  MRN0462576
+  MRN0152519
+
+Duplicates in today's file: 0
+None
+
+
+End of reconciliation report.

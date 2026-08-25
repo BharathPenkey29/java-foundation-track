@@ -1,0 +1,19 @@
+# Step dependency declarations.
+#   <step> -> <comma separated steps it depends on>
+# A step with nothing after the arrow has no dependencies.
+# Blank lines and lines starting with # are ignored.
+
+login        ->
+fetchRoster  -> login
+fetchVisits  -> login
+fetchOrders  -> login
+mergeReport  -> fetchRoster, fetchVisits
+validate     -> mergeReport, fetchOrders
+upload       -> validate
+archive      -> upload
+logout       -> upload
+
+# A second, disconnected component. It has no relationship to the steps
+# above and must still appear in the output.
+warmCache    ->
+pingHealth   -> warmCache

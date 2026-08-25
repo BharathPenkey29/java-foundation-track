@@ -1,0 +1,9 @@
+# This graph contains a cycle. Your resolver must name the steps involved,
+# not merely report that a cycle exists.
+
+login        ->
+fetchRoster  -> login
+mergeReport  -> fetchRoster, validate
+validate     -> upload
+upload       -> mergeReport
+logout       -> upload

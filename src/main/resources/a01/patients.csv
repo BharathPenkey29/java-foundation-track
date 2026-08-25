@@ -1,0 +1,29 @@
+mrn,lastName,firstName,dob,visitType,provider
+MRN00042,Alvarez,Rosa,1948-03-11,HOSPICE,K. Rao
+MRN00043,Bell,Thomas,1979-11-02,ROUTINE,K. Rao
+MRN00044,Chandrasekar,Meera,1955-12-20,ROUTINE,L. Byrne
+MRN00045,Okonkwo,Ifeanyi,1963-07-04,ROUTINE,L. Byrne
+MRN00046,Vasquez-Reed,Ana,1941-09-15,HOSPICE,P. Adeyemi
+MRN00047,Fitzgerald,Sean,1988-01-30,ROUTINE,P. Adeyemi
+MRN00048,Nakamura,Yuki,1952-02-26,PALLIATIVE,K. Rao
+MRN00049,Oyelaran,Tunde,1970-08-19,ROUTINE,D. Marchetti
+MRN00050,Petrov,Irina,1946-11-07,HOSPICE,D. Marchetti
+MRN00051,Whitfield,Margaret,1939-05-12,HOSPICE,L. Byrne
+MRN00052,Santos,Beatriz,1991-10-03,ROUTINE,P. Adeyemi
+MRN00053,Abernathy,Josiah,1958-06-28,PALLIATIVE,K. Rao
+MRN00054,Delacroix,Henri,1967-02-14,ROUTINE,D. Marchetti
+MRN00055,Iyengar,Sunita,1944-04-23,HOSPICE,L. Byrne
+MRN00056,Brennan,Colm,1983-09-08,ROUTINE,K. Rao
+MRN00057,Mbeki,Naledi,1960-12-01,ROUTINE,P. Adeyemi
+MRN00058,Kowalczyk,Ewa,1937-07-17,PALLIATIVE,D. Marchetti
+MRN00059,Thibodeaux,Marie,1975-03-05,ROUTINE,L. Byrne
+BADROW,MissingColumns,1990-01-01
+MRN00060,Haddad,Nour,1949-08-30,HOSPICE,K. Rao
+MRN00061,Sorensen,Lars,not-a-date,ROUTINE,P. Adeyemi
+MRN00062,Achebe,Chidi,1956-05-19,ROUTINE,D. Marchetti
+MRN00063,Lindqvist,Astrid,1993-11-27,ROUTINE,L. Byrne
+
+MRN00064,Farrugia,Joseph,1940-01-09,HOSPICE,P. Adeyemi
+MRN00065,Nkemelu,Adaeze,1962-10-12,PALLIATIVE,K. Rao
+MRN00066,Zieliński,Paweł,1981-06-21,ROUTINE,D. Marchetti
+MRN00067,Guerrero,Ximena,1953-02-03,ROUTINE,L. Byrne

@@ -6,6 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+// assignment 3 q 2 is using
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Assignment 1 - Q6
@@ -435,5 +438,111 @@ public class FixedWidthParser {
                         + " | "
                         + message
         );
+    }
+    public static List<String[]> parse(Path inputPath) {
+
+        List<String[]> records = new ArrayList<>();
+
+        if (!Files.exists(inputPath)) {
+            throw new IllegalArgumentException(
+                    "Input file not found: " + inputPath
+            );
+        }
+
+        if (!Files.isReadable(inputPath)) {
+            throw new IllegalArgumentException(
+                    "Input file is not readable: " + inputPath
+            );
+        }
+
+        try (BufferedReader reader =
+                     Files.newBufferedReader(
+                             inputPath,
+                             StandardCharsets.UTF_8
+                     )) {
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+
+                /*
+                 * Reuse the same Q6 validation rule:
+                 * the record must contain exactly 53 characters.
+                 */
+                if (line.length() != EXPECTED_LINE_LENGTH) {
+                    continue;
+                }
+
+                /*
+                 * Reuse the same Q6 field positions.
+                 */
+                String mrn =
+                        line.substring(
+                                MRN_START,
+                                MRN_END
+                        ).trim();
+
+                String lastName =
+                        line.substring(
+                                LAST_NAME_START,
+                                LAST_NAME_END
+                        ).trim();
+
+                String firstName =
+                        line.substring(
+                                FIRST_NAME_START,
+                                FIRST_NAME_END
+                        ).trim();
+
+                String dob =
+                        line.substring(
+                                DOB_START,
+                                DOB_END
+                        ).trim();
+
+                String checksum =
+                        line.substring(
+                                CHECKSUM_START,
+                                CHECKSUM_END
+                        ).trim();
+
+                /*
+                 * Reuse the Q6 checksum method.
+                 */
+                int calculatedChecksum =
+                        calculateChecksum(line);
+
+                String expectedChecksum =
+                        String.format(
+                                "%02d",
+                                calculatedChecksum
+                        );
+
+                /*
+                 * Only valid records are returned.
+                 */
+                if (!expectedChecksum.equals(checksum)) {
+                    continue;
+                }
+
+                records.add(
+                        new String[]{
+                                mrn,
+                                lastName,
+                                firstName,
+                                dob
+                        }
+                );
+            }
+
+        } catch (IOException exception) {
+            throw new RuntimeException(
+                    "Unable to read roster file: "
+                            + inputPath,
+                    exception
+            );
+        }
+
+        return records;
     }
 }

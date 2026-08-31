@@ -1,6 +1,5 @@
 package com.signia.training.a03oop;
 
-import com.signia.training.*;
 import org.junit.jupiter.api.Test;
 
 import java.net.SocketTimeoutException;

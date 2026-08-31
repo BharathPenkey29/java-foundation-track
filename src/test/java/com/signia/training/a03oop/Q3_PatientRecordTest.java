@@ -1,7 +1,5 @@
 package com.signia.training.a03oop;
 
-import com.signia.training.Q3_Diagnosis;
-import com.signia.training.Q3_PatientRecord;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
